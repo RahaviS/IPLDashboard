@@ -1,7 +1,10 @@
 import {Component} from 'react'
+import {Link} from 'react-router-dom'
+import {PieChart, Pie, Cell, Legend, ResponsiveContainer} from 'recharts'
 import Loader from 'react-loader-spinner'
 import LatestMatch from '../LatestMatch'
 import MatchCard from '../MatchCard'
+
 import './index.css'
 
 class TeamMatches extends Component {
@@ -55,13 +58,80 @@ class TeamMatches extends Component {
     )
   }
 
+  renderPieChart = () => {
+    const {teamMatches} = this.state
+    const {latestMatch, recentMatches} = teamMatches
+    let noOfWins = 0
+    let noOfLoses = 0
+    let noOfDraws = 0
+    const latestMatchStatus = latestMatch.matchStatus
+    if (latestMatchStatus === 'Won') {
+      noOfWins += 1
+    } else if (latestMatchStatus === 'Lost') {
+      noOfLoses += 1
+    } else {
+      noOfDraws += 1
+    }
+    for (let i = 0; i < recentMatches.length; i += 1) {
+      if (recentMatches[i].matchStatus === 'Won') {
+        noOfWins += 1
+      } else if (recentMatches[i].matchStatus === 'Lost') {
+        noOfLoses += 1
+      } else {
+        noOfDraws += 1
+      }
+    }
+    const data = [
+      {count: noOfWins, label: 'Won'},
+      {count: noOfLoses, label: 'Lost'},
+      {count: noOfDraws, label: 'Draw'},
+    ]
+    console.log(data)
+    return (
+      <div className="pie-section">
+        <h1 className="statistics-text">Statistics</h1>
+        <ResponsiveContainer width="100%" height={300}>
+          <PieChart>
+            <Pie
+              cx="40%"
+              cy="40%"
+              data={data}
+              startAngle={0}
+              endAngle={360}
+              innerRadius="30%"
+              outerRadius="70%"
+              dataKey="count"
+            >
+              <Cell name="No Of Wins" fill="#16f7f0" />
+              <Cell name="No of Loses" fill="#cc51fc" />
+              <Cell name="No of Draws" fill="#f7bb16" />
+            </Pie>
+            <Legend
+              iconType="circle"
+              layout="vertical"
+              verticalAlign="middle"
+              align="right"
+            />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+    )
+  }
+
   renderTeamMatches = () => {
     const {teamMatches} = this.state
     const {teamBannerUrl, latestMatch} = teamMatches
     return (
       <div className="responsive-container">
+        <Link to="/" className="home-link">
+          <button type="button" className="back-btn">
+            Back
+          </button>
+        </Link>
         <img src={teamBannerUrl} alt="team banner" className="team-banner" />
+        {this.renderPieChart()}
         <LatestMatch latestMatchData={latestMatch} />
+
         {this.renderRecentMatchesList()}
       </div>
     )
@@ -100,12 +170,13 @@ class TeamMatches extends Component {
   }
 
   render() {
-    const {isLoading, teamMatches} = this.state
+    const {isLoading} = this.state
+
     // const {latestMatch} = teamMatches
     // console.log(latestMatch.competingTeam)
     const className = `team-matches-container ${this.getRouteClassName()}`
     return (
-      <div className={className}>
+      <div className={`container ${className}`}>
         {isLoading ? this.renderLoader() : this.renderTeamMatches()}
       </div>
     )

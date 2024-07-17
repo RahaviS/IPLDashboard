@@ -53,3 +53,40 @@
     margin-top: 32px;
   }
 }
+.back-btn {
+  background-color: transparent;
+  border: 1px solid lightgrey;
+  outline: none;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 160px;
+  height: 36px;
+  font-family: 'Roboto';
+  color: white;
+  font-size: 16px;
+  margin-bottom: 40px;
+}
+.home-link {
+  text-decoration: none;
+}
+
+.pie-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.statistics-text {
+  font-family: 'Bree Serif';
+  font-size: 16px;
+  color: white;
+  font-weight: 500;
+  align-self: flex-start;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
